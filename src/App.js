@@ -1,8 +1,9 @@
-import { StatusBar } from 'react-native';
+import { StatusBar, Dimensions } from 'react-native';
 import styled, { ThemeProvider } from 'styled-components/native';
 import { theme } from './theme';
 import Input from './component/input';
 import { useState } from 'react';
+import Task from './component/Task';
 
 const Container = styled.View`
   flex: 1;
@@ -20,10 +21,45 @@ const Title = styled.Text`
   padding: 0 20px;
 `;
 
+const List = styled.ScrollView`
+  flex: 1;
+  width: ${({ width }) => width - 40}px;
+`;
+
 export default function App() {
+  const width = Dimensions.get('window').width;
+  const tempData = {    1: {
+      id: '1',
+      text: 'React Native',
+      isCompleted: false,
+    },
+    2: {
+      id: '2',
+      text: 'Expo',
+      isCompleted: false,
+    },
+    3: {
+      id: '3',
+      text: 'Javascript',
+      isCompleted: false,
+    },
+  };
+  const [tasks, setTasks] = useState(tempData);
   const [newTask, setNewTask] = useState('');
+
   const addTask = () => {
-    alert(newTask);
+    if (newTask.length === 0) {
+      return false;
+    }
+    const id = Date.now().toString();
+    const task = {
+      [id]: {
+        id,
+        text: newTask,
+        isCompleted: false,
+      },
+    };
+    setTasks({ ...tasks, ...task });
     setNewTask('');
   };
 
@@ -41,6 +77,13 @@ export default function App() {
           onChangeText={(text) => setNewTask(text)}
           onSubmitEditing={addTask}
         ></Input>
+        <List width={width}>
+          {Object.values(tasks)
+            .reverse()
+            .map((item) => (
+              <Task key={item.id} text={item.text} />
+            ))}
+        </List>
       </Container>
     </ThemeProvider>
   );
