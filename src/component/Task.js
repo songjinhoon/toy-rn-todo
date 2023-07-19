@@ -6,7 +6,7 @@ import { icons } from '../icon';
 const Container = styled.View`
   flex-direction: row;
   align-items: center;
-  background-color: ${({theme}) => theme.itemBackground};
+  background-color: ${({ theme }) => theme.itemBackground};
   border-radius: 10px;
   padding: 5px;
   margin: 3px 0;
@@ -14,22 +14,23 @@ const Container = styled.View`
 const Contents = styled.Text`
   flex: 1;
   font-size: 20px;
-  color: ${({theme}) => theme.text};
+  color: ${({ theme }) => theme.text};
 `;
 
-const Task = ({ text }) => {
+const Task = ({ item, deleteTask }) => {
   return (
     <Container>
       <IconButton icon={icons.unCheck}></IconButton>
-      <Contents>{text}</Contents>
+      <Contents>{item.text}</Contents>
       <IconButton icon={icons.edit}></IconButton>
-      <IconButton icon={icons.delete}></IconButton>
+      <IconButton icon={icons.delete} id={item.id} onPress={deleteTask}></IconButton>
     </Container>
   );
 };
 
 Task.prototype = {
-  text: PropTypes.string.isRequired,
+  item: PropTypes.object.isRequired,
+  deleteTask: PropTypes.func.isRequired,
 };
 
 export default Task;

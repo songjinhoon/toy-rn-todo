@@ -28,7 +28,8 @@ const List = styled.ScrollView`
 
 export default function App() {
   const width = Dimensions.get('window').width;
-  const tempData = {    1: {
+  const tempData = {
+    1: {
       id: '1',
       text: 'React Native',
       isCompleted: false,
@@ -63,6 +64,12 @@ export default function App() {
     setNewTask('');
   };
 
+  const deleteTask = (id) => {
+    const currentTasks = Object.assign({}, tasks);
+    delete currentTasks[id];
+    setTasks(currentTasks);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container>
@@ -81,7 +88,7 @@ export default function App() {
           {Object.values(tasks)
             .reverse()
             .map((item) => (
-              <Task key={item.id} text={item.text} />
+              <Task key={item.id} item={item} deleteTask={deleteTask} />
             ))}
         </List>
       </Container>
