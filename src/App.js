@@ -4,6 +4,7 @@ import { theme } from './theme';
 import Input from './component/input';
 import { useState } from 'react';
 import Task from './component/Task';
+import task from './component/Task';
 
 const Container = styled.View`
   flex: 1;
@@ -70,6 +71,18 @@ export default function App() {
     setTasks(currentTasks);
   };
 
+  const toggleTask = (id) => {
+    const currentTasks = Object.assign({}, tasks);
+    currentTasks[id].isCompleted = !currentTasks[id].isCompleted;
+    setTasks(currentTasks);
+  };
+
+  const updateTask = (item) => {
+    const currentTasks = Object.assign({}, tasks);
+    currentTasks[item.id] = item;
+    setTasks(currentTasks);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container>
@@ -83,12 +96,19 @@ export default function App() {
           value={newTask}
           onChangeText={(text) => setNewTask(text)}
           onSubmitEditing={addTask}
+          onBlur={() => setNewTask('')}
         ></Input>
         <List width={width}>
           {Object.values(tasks)
             .reverse()
             .map((item) => (
-              <Task key={item.id} item={item} deleteTask={deleteTask} />
+              <Task
+                key={item.id}
+                item={item}
+                deleteTask={deleteTask}
+                toggleTask={toggleTask}
+                updateTask={updateTask}
+              />
             ))}
         </List>
       </Container>

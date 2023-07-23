@@ -9,25 +9,30 @@ const Icon = styled.Image`
   width: 20px;
   height: 20px;
   margin: 20px;
-  tint-color: ${({ theme }) => theme.text};
+  tint-color: ${({ theme, isCompleted }) =>
+    isCompleted ? theme.done : theme.text};
 `;
 
-const IconButton = ({ icon, id, onPress }) => {
-  const _onPress = () => onPress(id);
+const IconButton = ({ icon, item, onPress }) => {
+  const _onPress = () => onPress(item.id);
 
   return (
     <TouchableOpacity onPress={_onPress}>
       <View>
-        <Icon source={icon}></Icon>
+        <Icon source={icon} isCompleted={item.isCompleted}></Icon>
       </View>
     </TouchableOpacity>
   );
 };
 
+IconButton.defaultProps = {
+  item: { isCompleted: false },
+};
+
 IconButton.prototype = {
   icon: PropTypes.oneOf(Object.values(icons)),
+  item: PropTypes.object,
   onPress: PropTypes.func,
-  id: PropTypes.string,
 };
 
 export default IconButton;
